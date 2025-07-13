@@ -1,7 +1,9 @@
 const express = require("express");
-const path = require("path");
-const app = express();
+const fs = require("fs");
+const https = require("https");
 const cors = require("cors");
+
+const app = express();
 
 app.use(
   cors({
@@ -17,6 +19,12 @@ app.use(
 //   res.sendFile(path.join(__dirname, "public", "index.html"));
 // });
 
+// Load certs
+const options = {
+  key: fs.readFileSync("key.pem"),
+  cert: fs.readFileSync("cert.pem"),
+};
+// Posts Database (move to PostgreSQL in Production)
 let posts = [
   {
     id: "5",
@@ -137,8 +145,11 @@ let posts = [
   },
 ];
 
+//  GET Posts API
 app.get("/api/posts", (req, res) => {
   res.json(posts);
 });
 
-app.listen(8000, () => console.log(`Server is running on port 8000`));
+https.createServer(options, app).listen(8000, () => {
+  console.log("HTTPS server running on https://0.0.0.0:8000");
+});

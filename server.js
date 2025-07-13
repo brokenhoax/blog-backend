@@ -4,12 +4,9 @@ const https = require("https");
 const cors = require("cors");
 
 const app = express();
-
 app.use(
   cors({
-    origin: "https://krauscloud.com:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    origin: "https://localhost:3000", // Your Next.js frontend
   })
 );
 
@@ -21,12 +18,6 @@ app.use(
 //   res.sendFile(path.join(__dirname, "public", "index.html"));
 // });
 
-// Load certs
-const options = {
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem"),
-};
-// Posts Database (move to PostgreSQL in Production)
 let posts = [
   {
     id: "5",
@@ -147,11 +138,8 @@ let posts = [
   },
 ];
 
-//  GET Posts API
-app.get("/api/posts", (req, res) => {
+app.get("/posts", (req, res) => {
   res.json(posts);
 });
 
-https.createServer(options, app).listen(8000, "0.0.0.0", () => {
-  console.log("HTTPS server running on https://0.0.0.0:8000");
-});
+app.listen(8000, () => console.log(`Server is running on port 8000`));

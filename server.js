@@ -152,6 +152,6 @@ app.get("/api/posts", (req, res) => {
   res.json(posts);
 });
 
-https.createServer(options, app).listen(8000, () => {
+https.createServer(options, app).listen(8000, "0.0.0.0", () => {
   console.log("HTTPS server running on https://0.0.0.0:8000");
 });

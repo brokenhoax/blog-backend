@@ -7,7 +7,9 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://localhost:3000", // Your Next.js frontend
+    origin: "https://krauscloud.com",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 

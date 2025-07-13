@@ -7,7 +7,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://krauscloud.com",
+    origin: "https://krauscloud.com:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

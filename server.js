@@ -5,7 +5,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Your Next.js frontend
+    origin: "https://localhost:3000", // Your Next.js frontend
   })
 );
 

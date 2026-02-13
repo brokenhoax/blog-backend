@@ -1,31 +1,46 @@
+require("dotenv").config({
+  path: process.env.NODE_ENV === "production" ? ".env.production" : ".env",
+});
 const express = require("express");
 const fs = require("fs");
 const https = require("https");
+const http = require("http");
 const cors = require("cors");
 
 const app = express();
 
 app.use(
   cors({
-    origin: "https://krauscloud.com:3000",
+    origin: ["http://localhost:3000", "https://krauscloud.com:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
-  })
+  }),
 );
 
-// setup static server
-// app.use(express.static(path.join(__dirname, "public")));
+//  GET Posts API
+app.get("/api/posts", (req, res) => {
+  res.json(posts);
+});
 
-// setup individual routes
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "index.html"));
-// });
+// Start server
+console.log(`Starting server in ${process.env.NODE_ENV} mode...`);
+if (process.env.NODE_ENV === "production") {
+  // Load certs for HTTPS in Production
+  const options = {
+    key: fs.readFileSync(process.env.CERT_KEY_PATH),
+    cert: fs.readFileSync(process.env.CERT_CERT_PATH),
+  };
+  // Create HTTPS server in Production
+  https.createServer(options, app).listen(8000, "0.0.0.0", () => {
+    console.log("HTTPS server running on https://0.0.0.0:8000");
+  });
+} else {
+  // Create HTTP server in Development
+  http.createServer(app).listen(8000, "0.0.0.0", () => {
+    console.log("HTTP server running on http://0.0.0.0:8000");
+  });
+}
 
-// Load certs
-const options = {
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem"),
-};
 // Posts Database (move to PostgreSQL in Production)
 let posts = [
   {
@@ -146,12 +161,3 @@ let posts = [
     previewText: `So, you've dabbled with create-react-app and you're ready to build and share something amazing with the world. Now what? This post will walk you through creating a GitHub repository to manage and back up your application as well as using GitHub Pages to publish your app to the web.`,
   },
 ];
-
-//  GET Posts API
-app.get("/api/posts", (req, res) => {
-  res.json(posts);
-});
-
-https.createServer(options, app).listen(8000, "0.0.0.0", () => {
-  console.log("HTTPS server running on https://0.0.0.0:8000");
-});

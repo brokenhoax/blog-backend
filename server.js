@@ -25,18 +25,100 @@ app.get("/api/posts", (req, res) => {
   res.json(posts);
 });
 
+const sessions = {}; // in-memory store
+
+// POST Chat Streaming API
 // POST Chat Streaming API
 app.post("/api/chat-stream", async (req, res) => {
+  const sessionId = String(req.body.sessionId || "default");
+  const userMessage = req.body.message;
+
+  // Initialize session if needed
+  if (!sessions[sessionId]) {
+    sessions[sessionId] = { messages: [], context: [] };
+  }
+
+  // Add the new user message to the conversation history
+  sessions[sessionId].messages.push({
+    role: "user",
+    content: userMessage,
+  });
+
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
+
+  // Call Ollama with full message history + context
   const stream = await ollama.chat({
     model: "llama3.1:8b",
-    messages: [{ role: "user", content: req.body.message }],
+    messages: sessions[sessionId].messages, // <-- full history
+    context: sessions[sessionId].context, // <-- KV cache
     stream: true,
   });
+
+  let lastChunk = null;
+  let assistantReply = "";
+
+  // Stream chunks to client
   for await (const chunk of stream) {
-    res.write(chunk.message?.content || "");
+    lastChunk = chunk;
+
+    const text = chunk.message?.content || "";
+    assistantReply += text;
+
+    res.write(text);
   }
+
   res.end();
+
+  // Add assistant reply to message history
+  if (assistantReply.trim().length > 0) {
+    sessions[sessionId].messages.push({
+      role: "assistant",
+      content: assistantReply,
+    });
+  }
+
+  // Save updated context
+  if (lastChunk?.context) {
+    sessions[sessionId].context = lastChunk.context;
+  }
+});
+
+// JSON ENDPOINT
+
+app.post("/api/chat-json", async (req, res) => {
+  const sessionId = String(req.body.sessionId || "default");
+  const { message } = req.body;
+
+  // Initialize session if needed
+  if (!sessions[sessionId]) {
+    sessions[sessionId] = { messages: [], context: [] };
+  }
+
+  // Add the new user message
+  sessions[sessionId].messages.push({
+    role: "user",
+    content: message,
+  });
+
+  const response = await ollama.chat({
+    model: "llama3.1:8b",
+    messages: sessions[sessionId].messages, // <-- THIS is the real memory
+    context: sessions[sessionId].context, // <-- optional speed boost
+    stream: false,
+  });
+
+  // Add assistant reply to message history
+  sessions[sessionId].messages.push(response.message);
+
+  // Save updated context (optional)
+  if (response.context) {
+    sessions[sessionId].context = response.context;
+  }
+
+  res.json({
+    reply: response.message?.content || "",
+    context: response.context,
+  });
 });
 
 // Start server

@@ -6,8 +6,11 @@ const fs = require("fs");
 const https = require("https");
 const http = require("http");
 const cors = require("cors");
+const { Ollama } = require("ollama");
+const ollama = new Ollama();
 
 const app = express();
+app.use(express.json());
 
 app.use(
   cors({
@@ -20,6 +23,20 @@ app.use(
 //  GET Posts API
 app.get("/api/posts", (req, res) => {
   res.json(posts);
+});
+
+// POST Chat Streaming API
+app.post("/api/chat-stream", async (req, res) => {
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  const stream = await ollama.chat({
+    model: "llama3.1:8b",
+    messages: [{ role: "user", content: req.body.message }],
+    stream: true,
+  });
+  for await (const chunk of stream) {
+    res.write(chunk.message?.content || "");
+  }
+  res.end();
 });
 
 // Start server

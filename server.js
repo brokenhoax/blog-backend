@@ -27,11 +27,24 @@ app.get("/api/posts", (req, res) => {
 
 const sessions = {}; // in-memory store
 
-// POST Chat Streaming API
+// Ensure session structure
+function ensureSession(sessionId) {
+  if (
+    !sessions[sessionId] ||
+    typeof sessions[sessionId] !== "object" ||
+    !Array.isArray(sessions[sessionId].messages) ||
+    !Array.isArray(sessions[sessionId].context)
+  ) {
+    sessions[sessionId] = { messages: [], context: [] };
+  }
+}
+
 // POST Chat Streaming API
 app.post("/api/chat-stream", async (req, res) => {
   const sessionId = String(req.body.sessionId || "default");
   const userMessage = req.body.message;
+
+  ensureSession(sessionId);
 
   // Initialize session if needed
   if (!sessions[sessionId]) {
@@ -83,11 +96,12 @@ app.post("/api/chat-stream", async (req, res) => {
   }
 });
 
-// JSON ENDPOINT
-
+// POST Chat JSON API
 app.post("/api/chat-json", async (req, res) => {
   const sessionId = String(req.body.sessionId || "default");
   const { message } = req.body;
+
+  ensureSession(sessionId);
 
   // Initialize session if needed
   if (!sessions[sessionId]) {

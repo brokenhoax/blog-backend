@@ -23,7 +23,7 @@ function safetyFilter(req, res, next) {
 
   if (isUnsafeInput(message)) {
     return res.status(400).json({
-      reply: "Your request was blocked by safety filters.",
+      message: "Your request was blocked by safety filters.",
       reason: "Potentially unsafe or code-execution content detected.",
     });
   }

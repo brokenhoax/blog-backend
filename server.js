@@ -8,6 +8,7 @@ const http = require("http");
 const cors = require("cors");
 const { Ollama } = require("ollama");
 const ollama = new Ollama();
+const guard = new Ollama();
 
 const app = express();
 app.use(express.json());
@@ -39,12 +40,34 @@ function ensureSession(sessionId) {
   }
 }
 
+// Run Llama Guard
+async function runLlamaGuard(input) {
+  try {
+    const response = await guard.chat({
+      model: "llama-guard:8b",
+      messages: [{ role: "user", content: input }],
+      stream: false,
+    });
+    return response.message?.content || "UNKNOWN";
+  } catch (err) {
+    console.error("Llama Guard error:", err);
+    return "ERROR";
+  }
+}
+
 // POST Chat Streaming API
 app.post("/api/chat-stream", async (req, res) => {
   const sessionId = String(req.body.sessionId || "default");
   const userMessage = req.body.message;
 
   ensureSession(sessionId);
+
+  //Run Llama Guard
+  const verdict = await runLlamaGuard(userMessage);
+  if (!verdict.includes("SAFE")) {
+    res.write("Your request was blocked by safety filters.");
+    return res.end();
+  }
 
   // Initialize session if needed
   if (!sessions[sessionId]) {
@@ -102,6 +125,15 @@ app.post("/api/chat-json", async (req, res) => {
   const { message } = req.body;
 
   ensureSession(sessionId);
+
+  //Run Llama Guard
+  const verdict = await runLlamaGuard(message);
+  if (!verdict.includes("SAFE")) {
+    return res.json({
+      reply: "Your request was blocked by safety filters.",
+      safety: verdict,
+    });
+  }
 
   // Initialize session if needed
   if (!sessions[sessionId]) {

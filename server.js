@@ -44,7 +44,7 @@ function ensureSession(sessionId) {
 async function runLlamaGuard(input) {
   try {
     const response = await guard.chat({
-      model: "llama-guard:8b",
+      model: "llama-guard3:8b",
       messages: [{ role: "user", content: input }],
       stream: false,
     });
@@ -128,7 +128,7 @@ app.post("/api/chat-json", async (req, res) => {
 
   //Run Llama Guard
   const verdict = await runLlamaGuard(message);
-  if (!verdict.includes("SAFE")) {
+  if (!verdict.includes("safe")) {
     return res.json({
       reply: "Your request was blocked by safety filters.",
       safety: verdict,

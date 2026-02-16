@@ -67,7 +67,6 @@ async function runLlamaGuard(input) {
 app.post("/api/chat-stream", safetyFilter, async (req, res) => {
   const sessionId = String(req.body.sessionId || "default");
   const userMessage = req.body.message;
-  const messages = [systemPrompt, ...sessions[sessionId].messages];
 
   ensureSession(sessionId);
 
@@ -88,6 +87,9 @@ app.post("/api/chat-stream", safetyFilter, async (req, res) => {
     role: "user",
     content: userMessage,
   });
+
+  // Prepend systemPrompt to messages
+  const messages = [systemPrompt, ...sessions[sessionId].messages];
 
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
 
@@ -132,7 +134,6 @@ app.post("/api/chat-stream", safetyFilter, async (req, res) => {
 app.post("/api/chat-json", safetyFilter, async (req, res) => {
   const sessionId = String(req.body.sessionId || "default");
   const { message } = req.body;
-  const messages = [systemPrompt, ...sessions[sessionId].messages];
 
   ensureSession(sessionId);
 
@@ -155,6 +156,9 @@ app.post("/api/chat-json", safetyFilter, async (req, res) => {
     role: "user",
     content: message,
   });
+
+  // Prepend systemPrompt to messages
+  const messages = [systemPrompt, ...sessions[sessionId].messages];
 
   const response = await ollama.chat({
     model: "llama3.1:8b",

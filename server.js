@@ -9,7 +9,7 @@ const cors = require("cors");
 const { Ollama } = require("ollama");
 const ollama = new Ollama();
 const guard = new Ollama();
-const safetyFilter = require("./filters/safetyFilter");
+const safetyFilter = require("./middleware/safetyFilter");
 
 const app = express();
 app.use(express.json());

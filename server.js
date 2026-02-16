@@ -9,6 +9,7 @@ const cors = require("cors");
 const { Ollama } = require("ollama");
 const ollama = new Ollama();
 const guard = new Ollama();
+const safetyFilter = require("./filters/safetyFilter");
 
 const app = express();
 app.use(express.json());
@@ -56,7 +57,7 @@ async function runLlamaGuard(input) {
 }
 
 // POST Chat Streaming API
-app.post("/api/chat-stream", async (req, res) => {
+app.post("/api/chat-stream", safetyFilter, async (req, res) => {
   const sessionId = String(req.body.sessionId || "default");
   const userMessage = req.body.message;
 
@@ -120,7 +121,7 @@ app.post("/api/chat-stream", async (req, res) => {
 });
 
 // POST Chat JSON API
-app.post("/api/chat-json", async (req, res) => {
+app.post("/api/chat-json", safetyFilter, async (req, res) => {
   const sessionId = String(req.body.sessionId || "default");
   const { message } = req.body;
 

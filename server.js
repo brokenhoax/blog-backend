@@ -131,7 +131,7 @@ app.post("/api/chat-json", safetyFilter, async (req, res) => {
   const verdict = await runLlamaGuard(message);
   if (!verdict.includes("safe")) {
     return res.json({
-      reply: "Your request was blocked by safety filters.",
+      message: "Your request was blocked by safety filters.",
       safety: verdict,
     });
   }

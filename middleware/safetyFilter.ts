@@ -1,4 +1,6 @@
-const DANGEROUS_PATTERNS = [
+import { Request, Response, NextFunction } from "express";
+
+const DANGEROUS_PATTERNS: RegExp[] = [
   /import\s+os/i,
   /zipfile/i,
   /base64/i,
@@ -14,12 +16,12 @@ const DANGEROUS_PATTERNS = [
   /mkfs/i,
 ];
 
-function isUnsafeInput(text) {
+function isUnsafeInput(text: string): boolean {
   return DANGEROUS_PATTERNS.some((pattern) => pattern.test(text));
 }
 
-function safetyFilter(req, res, next) {
-  const message = req.body?.message || "";
+export function safetyFilter(req: Request, res: Response, next: NextFunction) {
+  const message: string = req.body?.message || "";
 
   if (isUnsafeInput(message)) {
     return res.status(400).json({
@@ -31,4 +33,4 @@ function safetyFilter(req, res, next) {
   next();
 }
 
-module.exports = safetyFilter;
+export default safetyFilter;

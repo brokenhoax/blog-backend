@@ -4,7 +4,7 @@ import { Ollama } from "ollama";
 const ollama = new Ollama();
 
 const client = new ChromaClient({
-  path: "http://localhost:8001",
+  path: "https://localhost:8001",
 });
 
 // embed one text → number[]

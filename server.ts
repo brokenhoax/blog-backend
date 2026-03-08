@@ -16,6 +16,7 @@ const guard = new Ollama();
 // Express app
 const app = express();
 app.use(express.json());
+app.use(express.static("public"));
 
 // CORS
 app.use(

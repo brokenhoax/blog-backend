@@ -1,4 +1,4 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import fs from "fs";
 import { posts } from "./data/posts.ts";
 import express, { Request, Response } from "express";
@@ -8,6 +8,12 @@ import cors from "cors";
 import { Ollama, ChatResponse } from "ollama";
 import safetyFilter from "./middleware/safetyFilter.ts";
 import { getCollection, embed } from "./chroma-collection.ts";
+
+// Select Environment Variables
+dotenv.config({
+  path:
+    process.env.NODE_ENV === "production" ? ".env.production.local" : ".env",
+});
 
 // Ollama clients
 const ollama = new Ollama();

@@ -247,17 +247,6 @@ app.post(
 // -----------------------------
 console.log(`Starting server in ${process.env.NODE_ENV} mode...`);
 
-if (process.env.NODE_ENV === "production") {
-  const options = {
-    key: fs.readFileSync(process.env.CERT_KEY_PATH as string),
-    cert: fs.readFileSync(process.env.CERT_CERT_PATH as string),
-  };
-
-  createServer(options, app).listen(8000, "0.0.0.0", () => {
-    console.log("HTTPS server running on https://0.0.0.0:8000");
-  });
-} else {
-  createHttpServer(app).listen(8000, "0.0.0.0", () => {
-    console.log("HTTP server running on http://0.0.0.0:8000");
-  });
-}
+createHttpServer(app).listen(8000, "0.0.0.0", () => {
+  console.log("HTTP server running on http://0.0.0.0:8000");
+});

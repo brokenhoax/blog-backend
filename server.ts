@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 import fs from "fs";
-import { posts } from "./data/posts.ts";
+import { posts } from "./data/posts";
 import express, { Request, Response } from "express";
 import { createServer } from "https";
 import { createServer as createHttpServer } from "http";
 import cors from "cors";
 import { Ollama, ChatResponse } from "ollama";
-import safetyFilter from "./middleware/safetyFilter.ts";
-import { getCollection, embed } from "./chroma-collection.ts";
+import safetyFilter from "./middleware/safetyFilter";
+import { getCollection, embed } from "./chroma-collection";
 
 // Select Environment Variables
 dotenv.config({

@@ -1,7 +1,13 @@
 import { ChromaClient } from "chromadb";
 import { Ollama } from "ollama";
-
+import dotenv from "dotenv";
 const ollama = new Ollama();
+
+// Select Environment Variables
+dotenv.config({
+  path:
+    process.env.NODE_ENV === "production" ? ".env.production.local" : ".env",
+});
 
 const client = new ChromaClient({
   path: process.env.CHROMA_URL!,

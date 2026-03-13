@@ -196,14 +196,14 @@ app.post(
     ensureSession(sessionId);
 
     // Safety check
-    const verdict = await runLlamaGuard(userMessage);
-    console.log(verdict);
-    if (!verdict.toLowerCase().includes("safe")) {
-      return res.json({
-        message: "Your request was blocked by safety filters.",
-        safety: verdict,
-      });
-    }
+    // const verdict = await runLlamaGuard(userMessage);
+    // console.log(verdict);
+    // if (!verdict.toLowerCase().includes("safe")) {
+    //   return res.json({
+    //     message: "Your request was blocked by safety filters.",
+    //     safety: verdict,
+    //   });
+    // }
 
     // Add user message to history
     sessions[sessionId].messages.push({

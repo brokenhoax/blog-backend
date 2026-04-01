@@ -8,6 +8,7 @@ import cors from "cors";
 import { Ollama, ChatResponse } from "ollama";
 import safetyFilter from "./middleware/safetyFilter";
 import { getCollection, embed } from "./chroma-collection";
+import { callLlama, callXAI } from "./providers";
 
 // Select Environment Variables
 dotenv.config({
@@ -192,6 +193,7 @@ app.post(
   async (req: Request, res: Response) => {
     const sessionId = String(req.body.sessionId || "default");
     const userMessage: string = req.body.message;
+    const provider: string = req.body.provider || "llama"; // default to llama
 
     ensureSession(sessionId);
 
@@ -227,30 +229,29 @@ app.post(
       ...sessions[sessionId].messages,
     ];
 
-    // Call Ollama (non-streaming)
-    const response: ChatResponse = await ollama.chat({
-      model: "kraus-cloud-llama",
-      messages,
-      stream: false,
-    });
+    // --- Provider routing ---
+    let result;
+    if (provider === "xai") {
+      result = await callXAI(messages);
+    } else {
+      result = await callLlama(messages);
+    }
 
-    const assistantMessage = response.message?.content || "";
+    const assistantMessage = result.reply;
 
-    // Save assistant reply
     sessions[sessionId].messages.push({
       role: "assistant",
       content: assistantMessage,
     });
 
-    // Save updated KV cache
-    const responseWithContext = response as any;
-    if (responseWithContext.context) {
-      sessions[sessionId].context = responseWithContext.context;
+    if (result.context) {
+      sessions[sessionId].context = result.context;
     }
 
     res.json({
       reply: assistantMessage,
-      context: (response as any).context,
+      provider,
+      context: result.context,
     });
   },
 );
@@ -259,15 +260,18 @@ app.post(
 // Start Server
 // -----------------------------
 console.log(`Starting server in ${process.env.NODE_ENV} mode...`);
-console.log(`Starting server with ${process.env.DEV_ENV_IP_ADDR} address...`);
 console.log(`Chroma URL ${process.env.CHROMA_URL}`);
 
 if (process.env.NODE_ENV === "development") {
-  createHttpServer(app).listen(8000, "0.0.0.0", () => {
-    console.log("HTTP server running on http://0.0.0.0:8000");
+  createHttpServer(app).listen(8000, `${process.env.DEV_ENV_IP_ADDR}`, () => {
+    console.log(
+      `Starting server with ${process.env.DEV_ENV_IP_ADDR} address...`,
+    );
   });
 } else {
   createHttpServer(app).listen(8000, "0.0.0.0", () => {
-    console.log("HTTP server running on http://0.0.0.0:8000");
+    console.log(
+      `Starting server with ${process.env.PROD_ENV_IP_ADDR} address...`,
+    );
   });
 }

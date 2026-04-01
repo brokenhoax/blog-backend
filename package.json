@@ -7,8 +7,10 @@
   "scripts": {
     "dev": "NODE_ENV=development tsx watch server.ts",
     "start": "NODE_ENV=production tsx server.ts",
-    "embed": "tsx chroma-collection.ts",
-    "ingest": "tsx ingest.ts"
+    "dev_embed": "NODE_ENV=development tsx chroma-collection.ts",
+    "prod_embed": "NODE_ENV=production tsx chroma-collection.ts",
+    "dev_ingest": "NODE_ENV=development tsx ingest.ts",
+    "prod_ingest": "NODE_ENV=production tsx ingest.ts --reset"
   },
   "keywords": [],
   "author": "",

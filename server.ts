@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
-import fs from "fs";
 import { posts } from "./data/posts";
 import express, { Request, Response } from "express";
-import { createServer } from "https";
 import { createServer as createHttpServer } from "http";
 import cors from "cors";
 import { Ollama, ChatResponse } from "ollama";

@@ -269,7 +269,7 @@ if (process.env.NODE_ENV === "development") {
     );
   });
 } else {
-  createHttpServer(app).listen(8000, "0.0.0.0", () => {
+  createHttpServer(app).listen(8000, `${process.env.PROD_ENV_IP_ADDR}`, () => {
     console.log(
       `Starting server with ${process.env.PROD_ENV_IP_ADDR} address...`,
     );

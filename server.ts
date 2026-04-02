@@ -258,6 +258,7 @@ app.post(
 // Start Server
 // -----------------------------
 console.log(`Starting server in ${process.env.NODE_ENV} mode...`);
+console.log(`Starting server on port ${process.env.PORT}`);
 console.log(`Chroma URL ${process.env.CHROMA_URL}`);
 
 if (process.env.NODE_ENV === "development") {
@@ -268,8 +269,6 @@ if (process.env.NODE_ENV === "development") {
   });
 } else {
   createHttpServer(app).listen(process.env.PORT, () => {
-    console.log(
-      `Starting server with ${process.env.PROD_ENV_IP_ADDR} address...`,
-    );
+    console.log(`Starting server on port ${process.env.PORT}`);
   });
 }

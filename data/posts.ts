@@ -31,7 +31,7 @@ export const posts: Post[] = [
     icon: "fas fa-mug-hot",
     mugs: 3,
     tagline: "Extend the Zero Trust Exchange to Your Locations.",
-    path: "/pages/switch",
+    path: "/pages/zpa-pse",
     imagePath: "/images/infrared-eye.webp",
     imageAltText: "Infrared eye.",
     priority: true,

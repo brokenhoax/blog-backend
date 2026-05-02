@@ -21,12 +21,29 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    id: "6",
+    title: "Deploy Zscaler Private Service Edges",
+    date: "5-1-2026",
+    length: {
+      minutes: "40",
+      seconds: "00",
+    },
+    icon: "fas fa-mug-hot",
+    mugs: 3,
+    tagline: "Extend the Zero Trust Exchange to Your Locations.",
+    path: "/pages/switch",
+    imagePath: "/images/infrared-eye.webp",
+    imageAltText: "Infrared eye.",
+    priority: true,
+    previewText: `Zscaler Private Service Edges (PSEs) are, simply put, a way to extend Zscaler's security cloud (i.e., the “Zero Trust Exchange”) to your premises. PSEs solve multiple use cases. The purpose of this particular blog post is to demonstrate how PSEs help provide Zero Trust Network Access (ZTNA) while removing the need to hairpin local traffic to Zscaler for policy enforcement.`,
+  },
+  {
     id: "5",
     title: "Lab 3 — Switch",
     date: "2-16-2025",
     length: {
       minutes: "40",
-      seconds: "00"
+      seconds: "00",
     },
     icon: "fas fa-mug-hot",
     mugs: 4,
@@ -43,7 +60,7 @@ export const posts: Post[] = [
       doing a lot more than just connecting our switch to our firewall. 
       Other objectives include dividing our ten (10) physical interfaces
       into five (5) separate Virtual Local Area Networks (VLANs), disabling 
-      inter-VLAN routing, hardening our switch, and backing up our configuration.`
+      inter-VLAN routing, hardening our switch, and backing up our configuration.`,
   },
   {
     id: "4",
@@ -51,7 +68,7 @@ export const posts: Post[] = [
     date: "11-15-2024",
     length: {
       minutes: "60",
-      seconds: "00"
+      seconds: "00",
     },
     icon: "fas fa-mug-hot",
     mugs: 4,
@@ -67,7 +84,7 @@ export const posts: Post[] = [
       part, pfSense is completely free and open source! This post is a
       bit on the longer side, but hang in there because it's chock-full
       of good stuff that's at the foundation of our home lab and core to
-      learning networking and cybersecurity.`
+      learning networking and cybersecurity.`,
   },
   {
     id: "3",
@@ -75,7 +92,7 @@ export const posts: Post[] = [
     date: "10-31-2024",
     length: {
       minutes: "10",
-      seconds: "00"
+      seconds: "00",
     },
     icon: "fas fa-mug-hot",
     mugs: 2,
@@ -93,7 +110,7 @@ export const posts: Post[] = [
       will also include guidance on how to build a NextJS web app and
       deploy it on your own NGINX web server. Start thinking of a name
       for your cloud and review the rundown of required components
-      listed below. Let's gear up and go!`
+      listed below. Let's gear up and go!`,
   },
   {
     id: "2",
@@ -101,7 +118,7 @@ export const posts: Post[] = [
     date: "7-14-2022",
     length: {
       minutes: "15",
-      seconds: "00"
+      seconds: "00",
     },
     icon: "fas fa-mug-hot",
     mugs: 3,
@@ -117,7 +134,7 @@ export const posts: Post[] = [
       slider in Figma would be a worthy challenge and one worth sharing.
       What's more, this tutorial will expose you to highly useful Figma
       concepts such as components/variants, constraints, interactions, and
-      basic styling. Let's jump in!`
+      basic styling. Let's jump in!`,
   },
   {
     id: "1",
@@ -125,7 +142,7 @@ export const posts: Post[] = [
     date: "6-3-2021",
     length: {
       minutes: "10",
-      seconds: "00"
+      seconds: "00",
     },
     icon: "fas fa-mug-hot",
     mugs: 2,
@@ -134,6 +151,6 @@ export const posts: Post[] = [
     imagePath: "/images/code.webp",
     imageAltText: "Code",
     priority: true,
-    previewText: `So, you've dabbled with create-react-app and you're ready to build and share something amazing with the world. Now what? This post will walk you through creating a GitHub repository to manage and back up your application as well as using GitHub Pages to publish your app to the web.`
-  }
+    previewText: `So, you've dabbled with create-react-app and you're ready to build and share something amazing with the world. Now what? This post will walk you through creating a GitHub repository to manage and back up your application as well as using GitHub Pages to publish your app to the web.`,
+  },
 ];

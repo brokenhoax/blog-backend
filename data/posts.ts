@@ -22,7 +22,7 @@ export interface Post {
 export const posts: Post[] = [
   {
     id: "6",
-    title: "Deploy Zscaler Private Service Edges",
+    title: "Private Service Edges",
     date: "5-1-2026",
     length: {
       minutes: "40",
@@ -30,12 +30,12 @@ export const posts: Post[] = [
     },
     icon: "fas fa-mug-hot",
     mugs: 3,
-    tagline: "Extend the Zero Trust Exchange to Your Locations.",
+    tagline: "Performant ZTNA.",
     path: "/pages/zpa-pse",
     imagePath: "/images/blog-post-zpa-pse.webp",
     imageAltText: "Infrared eye.",
     priority: true,
-    previewText: `Zscaler Private Service Edges (PSEs) are, simply put, a way to extend Zscaler's security cloud (i.e., the “Zero Trust Exchange”) to your premises. PSEs solve multiple use cases. The purpose of this particular blog post is to demonstrate how PSEs help provide Zero Trust Network Access (ZTNA) while removing the need to hairpin local traffic to Zscaler for policy enforcement.`,
+    previewText: `Zscaler Private Service Edges are, simply put, a way to extend Zscaler's security cloud (i.e., the “Zero Trust Exchange”) to your locations. PSEs solve multiple use cases. The purpose of this particular blog post is to demonstrate how PSEs help provide Zero Trust Network Access while removing the need to hairpin local traffic to Zscaler for policy enforcement.`,
   },
   {
     id: "5",

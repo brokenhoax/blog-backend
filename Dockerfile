@@ -1,24 +1,27 @@
-# blog-backend/Dockerfile
-
-# --- Base dependencies stage ---
-FROM node:20-slim AS deps
+FROM node:20 AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# --- Build stage ---
-FROM node:20-slim AS builder
+FROM node:20 AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
 RUN npm run build
 
-# --- Production runner stage ---
-FROM node:20-slim AS runner
+FROM node:20 AS runner
 WORKDIR /app
+
+# Install ONNX runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libgomp1 \
+    libstdc++6 \
+    libgcc1 \
+    libgfortran5 \
+    libquadmath0 \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
 ENV PORT=8000

@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
-import { posts } from "./data/posts";
+import { posts } from "./data/posts.js";
 import express, { Request, Response } from "express";
 import { createServer as createHttpServer } from "http";
 import cors from "cors";
 import { Ollama, ChatResponse } from "ollama";
-import safetyFilter from "./middleware/safetyFilter";
-import { getCollection, embed } from "./chroma-collection";
-import { callLlama, callXAI } from "./providers";
+import safetyFilter from "./middleware/safetyFilter.js";
+import { getCollection, embed } from "./chroma-collection.js";
+import { callLlama, callXAI } from "./providers.js";
 
 // Select Environment Variables
 dotenv.config({
@@ -26,7 +26,7 @@ app.use(express.static("public"));
 // CORS
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://krauscloud.com:3000"],
+    origin: ["http://localhost:3000", "http://localhost:8000", "https://krauscloud.com:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),

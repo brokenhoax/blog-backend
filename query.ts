@@ -1,4 +1,4 @@
-import { getCollection } from "./chroma-collection.ts";
+import { getCollection } from "./chroma-collection.js";
 
 const recordsCollection = await getCollection("data");
 

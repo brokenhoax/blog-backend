@@ -1,5 +1,5 @@
 import fs from "fs";
-import { getCollection, embed } from "./chroma-collection";
+import { getCollection, embed } from "./chroma-collection.js";
 
 async function ingest() {
   const collection = await getCollection("data");

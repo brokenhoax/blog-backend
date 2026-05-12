@@ -11,7 +11,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
+# Copy your dataset into the image
 COPY data ./data
+
 FROM node:20 AS runner
 WORKDIR /app
 
@@ -31,6 +33,7 @@ ENV USE_HTTPS=false
 COPY package.json ./
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/data ./data
 
 EXPOSE 8000
 

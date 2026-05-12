@@ -11,6 +11,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
+COPY data ./data
 FROM node:20 AS runner
 WORKDIR /app
 

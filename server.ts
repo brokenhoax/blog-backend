@@ -26,7 +26,7 @@ app.use(express.static("public"));
 // CORS
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:8000", "https://krauscloud.com:3000"],
+    origin: ["http://localhost:3000", "https://krauscloud.com:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),

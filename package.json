@@ -11,7 +11,9 @@
     "dev_embed": "NODE_ENV=development tsx chroma-collection.ts",
     "prod_embed": "NODE_ENV=production tsx chroma-collection.ts",
     "dev_ingest": "NODE_ENV=development tsx ingest.ts",
-    "prod_ingest": "NODE_ENV=production tsx ingest.ts --reset"
+    "prod_ingest": "NODE_ENV=production tsx ingest.ts --reset",
+    "docker_ingest": "NODE_ENV=production node dist/ingest.js --reset"
+
   },
   "keywords": [],
   "author": "",

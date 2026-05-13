@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Copy your dataset into the image
-COPY data ./data
+COPY data /app/data
 
 FROM node:20 AS runner
 WORKDIR /app

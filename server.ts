@@ -153,6 +153,7 @@ app.post(
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
 
     const stream = await ollama.chat({
+      host: process.env.OLLAMA_HOST,
       model: "kraus-cloud-llama",
       messages,
       stream: true,

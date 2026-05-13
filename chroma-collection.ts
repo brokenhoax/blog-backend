@@ -1,7 +1,7 @@
 import { ChromaClient } from "chromadb";
 import { Ollama } from "ollama";
 import dotenv from "dotenv";
-const ollama = new Ollama();
+const ollama = new Ollama({host: process.env.OLLAMA_HOST});
 
 // Select Environment Variables
 dotenv.config({

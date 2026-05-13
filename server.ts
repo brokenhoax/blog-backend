@@ -15,8 +15,8 @@ dotenv.config({
 });
 
 // Ollama clients
-const ollama = new Ollama();
-const guard = new Ollama();
+const ollama = new Ollama({ host: process.env.OLLAMA_HOST });
+const guard = new Ollama({ host: process.env.OLLAMA_HOST });
 
 // Express app
 const app = express();
@@ -153,7 +153,6 @@ app.post(
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
 
     const stream = await ollama.chat({
-      host: process.env.OLLAMA_HOST,
       model: "kraus-cloud-llama",
       messages,
       stream: true,

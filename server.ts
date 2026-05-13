@@ -5,7 +5,7 @@ import { createServer as createHttpServer } from "http";
 import cors from "cors";
 import { Ollama, ChatResponse } from "ollama";
 import safetyFilter from "./middleware/safetyFilter.js";
-import { getCollection, embed } from "./chroma-collection.js";
+import { getOrCreateCollection, embed } from "./chroma-collection.js";
 import { callLlama, callXAI } from "./providers.js";
 
 // Select Environment Variables
@@ -37,7 +37,7 @@ app.use(
 // -----------------------------
 async function retrieveContext(query: string, k = 5): Promise<string[]> {
   const queryEmbedding = await embed(query);
-  const collection = await getCollection("data");
+  const collection = await getOrCreateCollection("data");
 
   const results = await collection.query({
     nResults: k,
@@ -110,7 +110,7 @@ async function runLlamaGuard(input: string): Promise<string> {
 
 // GET Collection
 app.get("/api/collection", async (req: Request, res: Response) => {
-  const collection = await getCollection("data");
+const collection = await getOrCreateCollection("data");
   const items = await collection.get();
   console.log();
   res.json({

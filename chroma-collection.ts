@@ -1,31 +1,51 @@
 import { ChromaClient } from "chromadb";
 import { Ollama } from "ollama";
 import dotenv from "dotenv";
-const ollama = new Ollama({host: process.env.OLLAMA_HOST});
 
-// Select Environment Variables
+// -----------------------------
+// Environment Variables
+// -----------------------------
 dotenv.config({
   path:
-    process.env.NODE_ENV === "production" ? ".env.production.local" : ".env",
+    process.env.NODE_ENV === "production"
+      ? ".env.production.local"
+      : ".env",
 });
 
+// -----------------------------
+// Ollama Client
+// -----------------------------
+const ollama = new Ollama({
+  host: process.env.OLLAMA_HOST,
+});
+
+// -----------------------------
+// Chroma Client
+// -----------------------------
 const client = new ChromaClient({
-  path: process.env.CHROMA_URL!,
+  path: process.env.CHROMA_URL!, // e.g. http://localhost:8000
 });
 
-// embed one text → number[]
+// -----------------------------
+// Embedding Function
+// -----------------------------
 export async function embed(text: string): Promise<number[]> {
   const res = await ollama.embeddings({
     model: "nomic-embed-text:v1.5",
     prompt: text,
   });
+
   return res.embedding;
 }
 
-// get or create a v2 collection
-export async function getCollection(name: string) {
+// -----------------------------
+// Collection Helper (Correct)
+// -----------------------------
+export async function getOrCreateCollection(name: string) {
   return await client.getOrCreateCollection({
     name,
-    metadata: { "hnsw:space": "cosine" },
+    metadata: {
+      "hnsw:space": "cosine",
+    },
   });
 }

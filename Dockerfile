@@ -11,9 +11,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-# Copy your dataset into the image
-COPY data /app/data
-
 FROM node:20 AS runner
 WORKDIR /app
 
@@ -32,8 +29,12 @@ ENV USE_HTTPS=false
 
 COPY package.json ./
 COPY --from=deps /app/node_modules ./node_modules
+
+# dist output
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/data ./data
+
+# Cop RAG mock data
+COPY data/dmvData.json ./dist/data
 
 EXPOSE 8000
 

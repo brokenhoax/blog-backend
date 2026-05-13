@@ -1,8 +1,8 @@
 import fs from "fs";
-import { getCollection, embed } from "./chroma-collection.js";
+import { getOrCreateCollection, embed } from "./chroma-collection.js";
 
 async function ingest() {
-  const collection = await getCollection("data");
+  const collection = await getOrCreateCollection("data");
   const data = JSON.parse(fs.readFileSync("./data/dmvData.json", "utf8"));
 
   for (const record of data) {

@@ -1,6 +1,6 @@
-import { getCollection } from "./chroma-collection.js";
+import { getOrCreateCollection } from "./chroma-collection.js";
 
-const recordsCollection = await getCollection("data");
+const recordsCollection = await getOrCreateCollection("data");
 
 const results = await recordsCollection.query({
   queryTexts: [

@@ -23,7 +23,7 @@ const ollama = new Ollama({
 // Chroma Client
 // -----------------------------
 const client = new ChromaClient({
-  path: process.env.CHROMA_URL!, // e.g. http://localhost:8000
+  path: process.env.CHROMA_URL!,
 });
 
 // -----------------------------

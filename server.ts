@@ -264,7 +264,7 @@ console.log(`Chroma URL ${process.env.CHROMA_URL}`);
 if (process.env.NODE_ENV === "development") {
   createHttpServer(app).listen(8000, process.env.DEV_ENV_IP_ADDR, () => {
     console.log(
-      `Starting server with ${process.env.DEV_ENV_IP_ADDR} address...`,
+      `Starting server with ${process.env.DEV_ENV_IP_ADDR} address on port 8000...`,
     );
   });
 } else {

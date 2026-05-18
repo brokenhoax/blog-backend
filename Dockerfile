@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y \
     libstdc++6 \
     libgcc1 \
     libgfortran5 \
-    libquadmath0 \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production

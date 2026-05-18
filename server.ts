@@ -7,6 +7,7 @@ import { Ollama, ChatResponse } from "ollama";
 import safetyFilter from "./middleware/safetyFilter.js";
 import { getOrCreateCollection, embed } from "./chroma-collection.js";
 import { callLlama, callXAI } from "./providers.js";
+import { runAiGuard } from "./ai-guard.js";
 
 // Select Environment Variables
 dotenv.config({
@@ -195,7 +196,12 @@ app.post(
 
     ensureSession(sessionId);
 
-    // Safety check
+
+    // ==============================================
+    // Guardrails
+    // ==============================================
+
+    // Llama Guard Safety Check
     // const verdict = await runLlamaGuard(userMessage);
     // console.log(verdict);
     // if (!verdict.toLowerCase().includes("safe")) {
@@ -204,6 +210,20 @@ app.post(
     //     safety: verdict,
     //   });
     // }
+
+    // AI Guard Safety Check for User Prompt
+    const promptVerdict = await runAiGuard({
+      policyId: 1239,
+      direction: "IN",
+      content: userMessage,
+    });
+    console.log(promptVerdict);
+    if (promptVerdict.action === "BLOCK") {
+      return res.json({
+        message: "Your request was blocked by safety filters.",
+        safety: promptVerdict.action,
+      });
+    }
 
     // Add user message to history
     sessions[sessionId].messages.push({
@@ -236,6 +256,20 @@ app.post(
     }
 
     const assistantMessage = result.reply;
+
+    // AI Guard Safety Check for User Prompt
+    const responseVerdict = await runAiGuard({
+      policyId: 1239,
+      direction: "OUT",
+      content: userMessage,
+    });
+    console.log(responseVerdict);
+    if (responseVerdict.action === "BLOCK") {
+      return res.json({
+        message: "Your request was blocked by safety filters.",
+        safety: responseVerdict.action,
+      });
+    }
 
     sessions[sessionId].messages.push({
       role: "assistant",

@@ -42,11 +42,11 @@ export async function callXAI(messages: any[]) {
   const json = await response.json();
 
   // Extract assistant reply
+  const message = json?.output?.find((o: { type: string; }) => o.type === "message");
   const reply =
-    json?.output?.[0]?.content ??
-    json?.output_text ??
+    message?.content?.find((c: { type: string; }) => c.type === "output_text")?.text ??
     "No response from xAI model.";
-
+  
   return {
     reply,
     context: null, // xAI does not return KV cache

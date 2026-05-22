@@ -217,7 +217,9 @@ app.post(
       direction: "IN",
       content: userMessage,
     });
-    console.log(promptVerdict);
+
+    console.log('promptVerdict:',promptVerdict);
+
     if (promptVerdict.action === "BLOCK") {
       return res.json({
         message: "Your request was blocked by safety filters.",
@@ -257,13 +259,15 @@ app.post(
 
     const assistantMessage = result.reply;
 
-    // AI Guard Safety Check for User Prompt
+    // AI Guard Safety Check for LLM Response
     const responseVerdict = await runAiGuard({
       policyId: 1239,
       direction: "OUT",
       content: userMessage,
     });
-    console.log(responseVerdict);
+
+    console.log('responseVerdict:',responseVerdict);
+
     if (responseVerdict.action === "BLOCK") {
       return res.json({
         message: "Your request was blocked by safety filters.",

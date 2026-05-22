@@ -212,18 +212,28 @@ app.post(
     // }
 
     // AI Guard Safety Check for User Prompt
-    const promptVerdict = await runAiGuard({
+    const promptGuard = await runAiGuard({
       policyId: 1239,
       direction: "IN",
       content: userMessage,
     });
 
-    console.log('promptVerdict:',promptVerdict);
+    if (!promptGuard.ok) {
+      console.error("AI Guard (IN) failed:", promptGuard);
+      return res.status(503).json({
+        message:
+          "Safety check is temporarily unavailable. Please try again later.",
+        error: promptGuard.code,
+        detail: promptGuard.message,
+      });
+    }
 
-    if (promptVerdict.action === "BLOCK") {
+    console.log("promptVerdict:", promptGuard.verdict);
+
+    if (promptGuard.verdict.action === "BLOCK") {
       return res.json({
         message: "Your request was blocked by safety filters.",
-        safety: promptVerdict.action,
+        safety: promptGuard.verdict.action,
       });
     }
 
@@ -260,18 +270,28 @@ app.post(
     const assistantMessage = result.reply;
 
     // AI Guard Safety Check for LLM Response
-    const responseVerdict = await runAiGuard({
+    const responseGuard = await runAiGuard({
       policyId: 1239,
       direction: "OUT",
-      content: userMessage,
+      content: assistantMessage,
     });
 
-    console.log('responseVerdict:',responseVerdict);
+    if (!responseGuard.ok) {
+      console.error("AI Guard (OUT) failed:", responseGuard);
+      return res.status(503).json({
+        message:
+          "Safety check is temporarily unavailable. Please try again later.",
+        error: responseGuard.code,
+        detail: responseGuard.message,
+      });
+    }
 
-    if (responseVerdict.action === "BLOCK") {
+    console.log("responseVerdict:", responseGuard.verdict);
+
+    if (responseGuard.verdict.action === "BLOCK") {
       return res.json({
         message: "Your request was blocked by safety filters.",
-        safety: responseVerdict.action,
+        safety: responseGuard.verdict.action,
       });
     }
 

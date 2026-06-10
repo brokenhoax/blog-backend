@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import "./load-env.js";
 import { posts } from "./data/posts.js";
 import express, { Request, Response } from "express";
 import { createServer as createHttpServer } from "http";
@@ -8,12 +8,6 @@ import safetyFilter from "./middleware/safetyFilter.js";
 import { getOrCreateCollection, embed } from "./chroma-collection.js";
 import { callLlama, callXAI } from "./providers.js";
 import { runAiGuard } from "./ai-guard.js";
-
-// Select Environment Variables
-dotenv.config({
-  path:
-    process.env.NODE_ENV === "production" ? ".env.production.local" : ".env",
-});
 
 // Ollama clients
 const ollama = new Ollama({ host: process.env.OLLAMA_HOST });

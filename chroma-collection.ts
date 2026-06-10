@@ -1,16 +1,24 @@
 import { ChromaClient } from "chromadb";
 import { Ollama } from "ollama";
-import dotenv from "dotenv";
+import "./load-env.js";
 
-// -----------------------------
-// Environment Variables
-// -----------------------------
-dotenv.config({
-  path:
-    process.env.NODE_ENV === "production"
-      ? ".env.production.local"
-      : ".env",
-});
+function parseChromaUrl(url: string) {
+  const parsed = new URL(url);
+  return {
+    host: parsed.hostname,
+    port: parsed.port
+      ? Number(parsed.port)
+      : parsed.protocol === "https:" ? 443 : 80,
+    ssl: parsed.protocol === "https:",
+  };
+}
+
+const chromaUrl = process.env.CHROMA_URL;
+if (!chromaUrl) {
+  throw new Error(
+    "CHROMA_URL is not set. Add it to .env.production (local dev) or .env.production.local (production).",
+  );
+}
 
 // -----------------------------
 // Ollama Client
@@ -22,9 +30,7 @@ const ollama = new Ollama({
 // -----------------------------
 // Chroma Client
 // -----------------------------
-const client = new ChromaClient({
-  path: process.env.CHROMA_URL!,
-});
+const client = new ChromaClient(parseChromaUrl(chromaUrl));
 
 // -----------------------------
 // Embedding Function
